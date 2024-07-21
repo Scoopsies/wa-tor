@@ -24,8 +24,18 @@
 
   (it "moves shark to random adjacent space if board is empty"
     (with-redefs [rand-nth (stub :rand-nth {:invoke first})]
-      (should= [0 0] (sut/get-move (c/create :shark [1 1]) [(c/create :shark [1 1])]))))
+      (should= [2 2] (sut/get-move (c/create :shark [1 1]) [(c/create :shark [1 1])]))))
 
   (it "moves shark to place with fish if one is adjacent"
     (should= [1 2] (sut/get-move (c/create :shark [1 1]) [(c/create :shark [1 1])
-                                                          (c/create :fish [1 2])]))))
+                                                          (c/create :fish [1 2])])))
+
+  (it "does not move to spaces occupied by other sharks"
+    (with-redefs [rand-nth (stub :rand-nth)]
+      (sut/get-move (c/create :shark [1 1]) [(c/create :shark [1 1]) (c/create :shark [0 0])])
+      (should-have-invoked :rand-nth {:with [[[2 2] [1 0] [0 2] [2 0] [2 1] [1 2] [0 1]]]})))
+
+  (it "stays in place if surrounded by sharks"
+    (let [shark-list (map #(c/create :shark %) (shark/get-adjacent {:position [0 0]}))]
+      (should= [0 0] (sut/get-move (c/create :shark [0 0]) shark-list))))
+  )
