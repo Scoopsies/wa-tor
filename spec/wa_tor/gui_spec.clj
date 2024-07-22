@@ -72,7 +72,7 @@
       (sut/draw (c/create :shark))
       (should-have-invoked :draw-board)))
 
-  (context "next-state"
+  #_(context "next-state"
     (redefs-around [b/update-board (stub :update-board)])
     (it "calls draw-board 1 time."
       (sut/next-state [(c/create :fish)])

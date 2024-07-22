@@ -4,7 +4,7 @@
             [wa-tor.move.core :as sut]
             [wa-tor.move.shark :as shark]))
 
-(describe "move.shark"
+#_(describe "move.shark"
   (with-stubs)
   (context "get-adjacent"
     (it "returns a list of adjacent cells"

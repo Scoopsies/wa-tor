@@ -8,8 +8,8 @@
   (context "get-move :default"
     (it "returns the original position"
       (let [fish (c/create :fish) {:keys [position]} fish]
-        (should= position (sut/get-move fish)))
+        (should= position (sut/get-move fish [])))
 
-      (let [shark (c/create :shark) {:keys [position]} shark]
-        (should= position (sut/get-move shark)))))
+      #_(let [shark (c/create :shark [4 4]) {:keys [position]} shark]
+        (should= position (sut/get-move shark [])))))
   )

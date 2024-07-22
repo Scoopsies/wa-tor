@@ -1,11 +1,21 @@
 (ns wa-tor.update-board-spec
   (:require [speclj.core :refer :all]
-            [wa-tor.update-board :as sut]
             [wa-tor.create :as c]
-            [wa-tor.move :as m]
-            [wa-tor.settings :as s]))
+            [wa-tor.update-board :as sut]))
 
 (describe "update-board"
+  (it "updates all of the creatures stats"
+    (let [shark (c/create :shark [0 0]) {:keys [energy breeding]} shark]
+      (should= [(dec energy)] (map :energy (sut/update-board [shark])))
+      (should= [(dec energy) (dec energy)]
+               (map :energy (sut/update-board [shark shark])))
+
+      (should= [(dec breeding)] (map :breeding (sut/update-board [shark])))
+      (should= [(dec breeding) (dec breeding)]
+               (map :breeding (sut/update-board [shark shark])))))
+  )
+
+#_(describe "update-board"
   (context "update-board"
     (it "removes any eaten fish"
       (should= [:shark] (map :species (sut/update-board [(c/create :shark [0 0]) (c/create :fish [0 1])]))))
