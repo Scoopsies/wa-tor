@@ -18,15 +18,14 @@
         {:keys [species position]} current-creature]
     [updated-creature (c/create species position)]))
 
-(defn- dead-shark? [current-creature]
-  (let [{:keys [species energy]} current-creature]
-    (and (= species :shark) (zero? energy))))
+(defn- dead? [current-creature]
+  (= 0 (:energy current-creature)))
 
 (defn- handle-life-cycle [old-list result]
   (let [current-creature (first old-list) current-list (concat old-list result)
         updated-creature (uc/update-creature current-creature current-list)]
     (cond
-      (dead-shark? current-creature) result
+      (dead? current-creature) result
       (in-labor? current-creature updated-creature) (concat result (make-baby current-creature current-list))
       :else (conj (vec result) updated-creature))))
 
