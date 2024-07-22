@@ -12,11 +12,21 @@
           :when (not= position [x y])]
       (format-cell [x y]))))
 
-(defmethod core/get-move :shark [creature all-creatures]
+(defn get-adjacent-fish [creature all-creatures]
   (let [adjacent-spaces (get-adjacent creature)
         fish-list (filter #(= :fish (:species %)) all-creatures)
-        fish-positions (map :position fish-list)
-        adjacent-fish (vec (set/intersection (set adjacent-spaces) (set fish-positions)))]
-    (if (empty? adjacent-fish)
-      (rand-nth (get-adjacent creature))
-      (rand-nth adjacent-fish))))
+        fish-positions (map :position fish-list)]
+    (vec (set/intersection (set adjacent-spaces) (set fish-positions)))))
+
+(defn get-vacant-adjacent [creature all-creatures]
+  (let [adjacent-spaces (get-adjacent creature)
+        occupied-spaces (map :position all-creatures)]
+    (vec (set/difference (set adjacent-spaces) (set occupied-spaces)))))
+
+(defmethod core/get-move :shark [creature all-creatures]
+  (let [vacant-adjacent (get-vacant-adjacent creature all-creatures)
+        adjacent-fish (get-adjacent-fish creature all-creatures)]
+    (cond
+      (not-empty adjacent-fish) (rand-nth adjacent-fish)
+      (empty? vacant-adjacent) (:position creature)
+      :else (rand-nth vacant-adjacent))))
