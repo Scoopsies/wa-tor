@@ -40,8 +40,7 @@
   (draw-board state))
 
 (defn next-state [state]
-  state
-  #_(b/update-board state))
+  (b/update-board state))
 
 (declare wa-tor)
 
