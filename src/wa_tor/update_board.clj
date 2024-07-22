@@ -1,11 +1,27 @@
 (ns wa-tor.update-board
-  (:require [wa-tor.update-creature :as uc])
+  (:require [wa-tor.create :as c]
+            [wa-tor.move.shark :as shark]
+            [wa-tor.update-creature :as uc])
   #_(:require [wa-tor.create :as c]
             [wa-tor.move :as move]
             [wa-tor.settings :as settings]))
 
+(defn filter-eaten-fish [old-list updated-creature]
+  (let [{:keys [position]} updated-creature]
+    (remove #(= position (:position %)) old-list)))
+
 (defn update-board [creature-list]
-  (map #(uc/update-creature % creature-list) creature-list))
+  (loop [old-list creature-list result []]
+    (if (empty? old-list)
+      result
+      (let [current-creature (first old-list)
+            {:keys [species position]} current-creature
+            updated-creature (uc/update-creature current-creature old-list)]
+        (recur
+          (rest (filter-eaten-fish old-list updated-creature))
+          (if (zero? (:breeding current-creature))
+            (concat result [updated-creature (c/create species position)])
+            (conj (vec result) updated-creature)))))))
 
 ;(defn remove-eaten [old-board updated-creature]
 ;  (remove #(= (:position updated-creature) (:position %)) old-board))
