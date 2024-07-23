@@ -1,7 +1,6 @@
 (ns wa-tor.update-creature-spec
   (:require [speclj.core :refer :all]
             [wa-tor.create :as c]
-            [wa-tor.settings :as settings]
             [wa-tor.update-creature :as sut]))
 
 (describe "update-creature"
