@@ -1,11 +1,12 @@
 (ns wa-tor.update-creature
   (:require [wa-tor.move.core :as move]
             [wa-tor.move.shark :as shark]
-            [wa-tor.settings :as settings]))
+            [wa-tor.move.fish]
+            [wa-tor.create :as c]))
 
 (defn- update-breeding [creature]
   (let [{:keys [breeding species]} creature
-        refill (if (= :fish species) settings/fish-breeding settings/shark-breeding)]
+        refill (if (= :fish species) c/fish-breeding c/shark-breeding)]
     (if (zero? breeding)
       (assoc creature :breeding refill)
       (assoc creature :breeding (dec breeding)))))
@@ -15,7 +16,7 @@
     (assoc creature :energy (dec energy))))
 
 (defn- refill-energy [creature]
-  (assoc creature :energy settings/shark-energy))
+  (assoc creature :energy c/shark-energy))
 
 (defn update-energy [creature adjacent-fish]
   (if (empty? adjacent-fish)

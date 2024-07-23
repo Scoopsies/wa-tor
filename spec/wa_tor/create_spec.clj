@@ -1,7 +1,6 @@
 (ns wa-tor.create-spec
   (:require [speclj.core :refer :all]
-            [wa-tor.create :as sut]
-            [wa-tor.settings :as settings]))
+            [wa-tor.create :as sut]))
 
 (describe "create"
   (with-stubs)
