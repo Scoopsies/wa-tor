@@ -3,11 +3,10 @@
             [wa-tor.update-creature :as uc]))
 
 (defn- filter-eaten-fish [old-list result]
-  (let [updated-creature (uc/update-creature (first old-list) (concat old-list result))
-        {:keys [position]} updated-creature]
-    (if (= position (:position (first old-list)))
+  (let [{updated-pos :position} (uc/update-creature (first old-list) (concat old-list result))]
+    (if (= updated-pos (:position (first old-list)))
       old-list
-      (remove #(= position (:position %)) old-list))))
+      (remove #(= updated-pos (:position %)) old-list))))
 
 (defn- in-labor? [current-creature updated-creature]
   (let [{:keys [breeding position]} current-creature]
