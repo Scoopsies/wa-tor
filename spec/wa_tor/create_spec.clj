@@ -18,26 +18,26 @@
   (context ":fish"
     (it "creates a fish with position specified"
       (should= (sut/create :fish [0 0])
-               {:species :fish :breeding settings/fish-breeding :position [0 0]})
+               {:species :fish :breeding sut/fish-breeding :position [0 0]})
       (should= (sut/create :fish [1 1])
-               {:species :fish :breeding settings/fish-breeding :position [1 1]}))
+               {:species :fish :breeding sut/fish-breeding :position [1 1]}))
 
     (it "creates a fish with random position if position not specified"
       (with-redefs [rand-int (stub :rand-int {:return 21})]
-        (should= {:species :fish :breeding settings/fish-breeding :position [21 21]}
+        (should= {:species :fish :breeding sut/fish-breeding :position [21 21]}
                  (sut/create :fish))))
     )
 
   (context ":shark"
     (it "creates a shark with position specified"
-      (should= {:species :shark :breeding settings/shark-breeding
-                :position [0 0] :energy settings/shark-energy}
+      (should= {:species :shark :breeding sut/shark-breeding
+                :position [0 0] :energy sut/shark-energy}
                (sut/create :shark [0 0])))
 
     (it "creates a shark with random position if position not specified"
       (with-redefs [rand-int (stub :rand-int {:return 21})]
-        (should= {:species :shark :breeding settings/shark-breeding
-                  :position [21 21] :energy settings/shark-energy}
+        (should= {:species :shark :breeding sut/shark-breeding
+                  :position [21 21] :energy sut/shark-energy}
                  (sut/create :shark))))
     )
 

@@ -2,6 +2,10 @@
   (:require [wa-tor.core :as core]
             #_[wa-tor.core :refer [create]]))
 
+(def shark-breeding 8)
+(def shark-energy 6)
+(def fish-breeding 3)
+
 (defn get-rand-position []
   [(rand-int core/row-size) (rand-int core/row-size)])
 
@@ -12,7 +16,7 @@
 
   ([_ position]
    {:species  :fish
-    :breeding core/fish-breeding
+    :breeding fish-breeding
     :position position}))
 
 (defmethod create :shark
@@ -20,9 +24,9 @@
 
   ([_ position]
    {:species  :shark
-    :breeding core/shark-breeding
+    :breeding shark-breeding
     :position position
-    :energy   core/shark-energy}))
+    :energy   shark-energy}))
 
 (defn- repeat-creature [species amount]
   (take amount (repeatedly #(create species))))
