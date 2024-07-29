@@ -2,7 +2,5 @@
 
 (defmulti get-move :species)
 
-
 (defmethod get-move :default [{:keys [position]} _]
   position)
-
