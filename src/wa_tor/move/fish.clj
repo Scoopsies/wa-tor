@@ -1,26 +1,27 @@
 (ns wa-tor.move.fish
   (:require [clojure.set :as set]
-            [wa-tor.move.core :as move]))
+            [wa-tor.move.core :as move-core]
+            [wa-tor.core :as core]))
 
-(defn translate [xy]
+(defn- wrap-grid [xy]
   (cond
-    (= -1 xy) 19
-    (= 20 xy) 0
+    (= xy -1) (dec core/row-size)
+    (= xy core/row-size) 0
     :else xy))
 
-(defn get-adjacent-spaces [position]
-  (let [[x y] position]
-    (for [y [(dec y) y (inc y)]
-          x [(dec x) x (inc x)]
-          :when (not= position [x y])]
-      (map translate [x y]))))
+(defn get-adjacent [[x y]]
+  (for [Y [(dec y) y (inc y)]
+        X [(dec x) x (inc x)]
+        :when (not= [x y] [X Y])]
+    (map wrap-grid [X Y])))
 
-(defn get-vacant-adjacent [position all-creatures]
-  (let [adjacent-spaces (get-adjacent-spaces position)]
-    (sort-by second (vec (set/difference (set adjacent-spaces) (set (map :position all-creatures)))))))
+(defn get-vacant-adjacent [position fish-list]
+  (let [adjacent (get-adjacent position)
+        all-occupied (map :position fish-list)]
+    (vec (set/difference (set adjacent) (set all-occupied)))))
 
-(defmethod move/get-move :fish [creature all-creatures]
-  (let [vacant-adjacent (get-vacant-adjacent (:position creature) all-creatures)]
+(defmethod move-core/get-move :fish [{:keys [position]} fish-list]
+  (let [vacant-adjacent (get-vacant-adjacent position fish-list)]
     (if (empty? vacant-adjacent)
-      (:position creature)
+      position
       (rand-nth vacant-adjacent))))
